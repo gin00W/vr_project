@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &79836775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1835974611799229725, guid: 9abf9c7406e633d4fb95c6ee70e2aa0a, type: 3}
+  m_PrefabInstance: {fileID: 1968137051}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &114782186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -707,6 +718,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &439963403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6312191623279421543, guid: 9abf9c7406e633d4fb95c6ee70e2aa0a, type: 3}
+  m_PrefabInstance: {fileID: 1968137051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &476942245 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e76e6efc76c78224786e3212f581bf1f, type: 3}
@@ -728,8 +744,8 @@ MonoBehaviour:
   defaultClip: {fileID: 8300000, guid: 59fd7e4dc61acb74183b3dcd8a3ea460, type: 3}
   soundEffectRoot: {fileID: 1738113565}
   soundParticle: {fileID: 1738113567}
-  subtitlePanelRoot: {fileID: 0}
-  subtitleText: {fileID: 0}
+  subtitlePanelRoot: {fileID: 510989934}
+  subtitleText: {fileID: 1305524089}
   defaultSubtitle: "\uAC00\uC2A4 \uAC80\uCE68\uC740 \uAD6D\uAC00\uC801\uC73C\uB85C
     \uC2DC\uD589\uB418\uACE0 \uC788\uC73C\uB2C8 \uC548\uC2EC\uD558\uC138\uC694."
   clearSubtitleWhenFinished: 1
@@ -830,6 +846,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &500782267 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5127575137215646312, guid: 9abf9c7406e633d4fb95c6ee70e2aa0a, type: 3}
+  m_PrefabInstance: {fileID: 1968137051}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &510989934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5324551113322039506, guid: 38ea3b1addeab2747b1ff3501c2d54c9, type: 3}
+  m_PrefabInstance: {fileID: 2071038234}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &652484466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1575,9 +1607,9 @@ MonoBehaviour:
   room1Voice3: {fileID: 8300000, guid: 0c323cb7ddf2df44e815bb0193951c2b, type: 3}
   room1Subtitle3: "\uBC38\uBE0C\uB294 \uAC00\uC2A4\uAC00 \uC2E4\uC81C\uB85C \uB204\uC218\uB418\uACE0
     \uC788\uB294 \uACBD\uC6B0\uC5D0\uB9CC \uC704\uD5D8\uD569\uB2C8\uB2E4."
-  stageFailPopupRoot: {fileID: 0}
-  retryButton: {fileID: 0}
-  mainMenuButton: {fileID: 0}
+  stageFailPopupRoot: {fileID: 439963403}
+  retryButton: {fileID: 79836775}
+  mainMenuButton: {fileID: 500782267}
   mainMenuSceneName: start scene
 --- !u!1 &1290147876
 GameObject:
@@ -1669,6 +1701,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290147876}
   m_Mesh: {fileID: 2136306600352423492, guid: 3213cc2c77169584fb06bb98f51bb06c, type: 3}
+--- !u!114 &1305524089 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3081235321982500567, guid: 38ea3b1addeab2747b1ff3501c2d54c9, type: 3}
+  m_PrefabInstance: {fileID: 2071038234}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1343176972
 GameObject:
   m_ObjectHideFlags: 0
@@ -7674,6 +7717,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8439158582715798166, guid: 9abf9c7406e633d4fb95c6ee70e2aa0a, type: 3}
+      propertyPath: startTimeSeconds
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -7791,7 +7838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9209815245213473150, guid: 38ea3b1addeab2747b1ff3501c2d54c9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1065369
+      value: -291
       objectReference: {fileID: 0}
     - target: {fileID: 9209815245213473150, guid: 38ea3b1addeab2747b1ff3501c2d54c9, type: 3}
       propertyPath: m_LocalPosition.y
