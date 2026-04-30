@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: 0cacf4c76adebb048a9d5d644dc22bfa
+timeCreated: 1455837456
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Door
+    100002: Door Lock Bolt
+    100004: Door Lock Bolt001
+    100006: Door Lock Latch
+    100008: Door Lock Latch001
+    100010: Door001
+    100012: Seat
+    100014: Seat Lid
+    100016: Seat Lid001
+    100018: Seat001
+    100020: //RootNode
+    100022: Stall 01
+    100024: Stall 02
+    100026: Stall Wall
+    100028: Stall Wall001
+    100030: Toilet
+    100032: Toilet Button
+    100034: Toilet Button001
+    100036: Toilet Paper
+    100038: Toilet Paper001
+    100040: Toilet Roll Holder
+    100042: Toilet Roll Holder001
+    100044: Toilet001
+    100046: Toilet Water
+    400000: Door
+    400002: Door Lock Bolt
+    400004: Door Lock Bolt001
+    400006: Door Lock Latch
+    400008: Door Lock Latch001
+    400010: Door001
+    400012: Seat
+    400014: Seat Lid
+    400016: Seat Lid001
+    400018: Seat001
+    400020: //RootNode
+    400022: Stall 01
+    400024: Stall 02
+    400026: Stall Wall
+    400028: Stall Wall001
+    400030: Toilet
+    400032: Toilet Button
+    400034: Toilet Button001
+    400036: Toilet Paper
+    400038: Toilet Paper001
+    400040: Toilet Roll Holder
+    400042: Toilet Roll Holder001
+    400044: Toilet001
+    400046: Toilet Water
+    2300000: Door
+    2300002: Door Lock Bolt
+    2300004: Door Lock Bolt001
+    2300006: Door Lock Latch
+    2300008: Door Lock Latch001
+    2300010: Door001
+    2300012: Seat
+    2300014: Seat Lid
+    2300016: Seat Lid001
+    2300018: Seat001
+    2300020: Stall Wall
+    2300022: Stall Wall001
+    2300024: Toilet
+    2300026: Toilet Button
+    2300028: Toilet Button001
+    2300030: Toilet Paper
+    2300032: Toilet Paper001
+    2300034: Toilet Roll Holder
+    2300036: Toilet Roll Holder001
+    2300038: Toilet001
+    2300040: Toilet Water
+    3300000: Door
+    3300002: Door Lock Bolt
+    3300004: Door Lock Bolt001
+    3300006: Door Lock Latch
+    3300008: Door Lock Latch001
+    3300010: Door001
+    3300012: Seat
+    3300014: Seat Lid
+    3300016: Seat Lid001
+    3300018: Seat001
+    3300020: Stall Wall
+    3300022: Stall Wall001
+    3300024: Toilet
+    3300026: Toilet Button
+    3300028: Toilet Button001
+    3300030: Toilet Paper
+    3300032: Toilet Paper001
+    3300034: Toilet Roll Holder
+    3300036: Toilet Roll Holder001
+    3300038: Toilet001
+    3300040: Toilet Water
+    4300000: Toilet001
+    4300002: Seat001
+    4300004: Seat Lid001
+    4300006: Toilet Button001
+    4300008: Toilet Roll Holder001
+    4300010: Toilet Paper001
+    4300012: Stall Wall
+    4300014: Door
+    4300016: Door Lock Bolt
+    4300018: Door Lock Latch
+    4300020: Toilet
+    4300022: Seat Lid
+    4300024: Seat
+    4300026: Toilet Button
+    4300028: Toilet Roll Holder
+    4300030: Toilet Paper
+    4300032: Stall Wall001
+    4300034: Door001
+    4300036: Door Lock Bolt001
+    4300038: Door Lock Latch001
+    4300040: Toilet Water
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 1
+    materialSearch: 2
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 59491
+  packageName: Untitled
+  packageVersion: 1.0
+  assetPath: Assets/Public Bathroom Assets/Models/Stall 01.FBX
+  uploadId: 118993
