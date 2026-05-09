@@ -1,5 +1,3 @@
-// Assets/scripts/Interaction/cshGasValveSkillCheckController.cs
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -32,6 +30,9 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     [Header("Mouse Rotation")]
     [SerializeField] private float mouseRotationScale = 1f;
     [SerializeField] private bool invertMouseClockwise = false;
+
+    [Header("Guide Image")]
+    [SerializeField] private GameObject guideRoot;
 
     [Header("Skill Check UI")]
     [SerializeField] private GameObject skillCheckRoot;
@@ -83,6 +84,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     private bool isSkillCheckActive;
     private bool isFading;
     private bool hasStageFailed;
+    private bool hasInteractedOnce;
 
     private bool isVrSelected;
     private Transform activeInteractorTransform;
@@ -151,6 +153,8 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         }
 
         currentValveAngleDegrees = 0f;
+        hasInteractedOnce = false;
+        SetGuideVisible(true);
         HideSkillCheckImmediate();
     }
 
@@ -196,6 +200,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
 
     private void Update()
     {
+        UpdateGuideVisual();
         UpdateSkillCheckWorldTransform();
 
         if (hasStageFailed)
@@ -224,6 +229,8 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         {
             return;
         }
+
+        MarkFirstInteraction();
 
         isVrSelected = true;
         activeInteractorTransform = args.interactorObject?.transform;
@@ -334,6 +341,8 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
 
                 if (clickedThisObject)
                 {
+                    MarkFirstInteraction();
+
                     isMouseDraggingObject = true;
                     previousMouseAngle = GetMouseAngleAroundValve(cam, mouse.position.ReadValue());
                     hasPreviousMouseAngle = true;
@@ -371,6 +380,61 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         }
 
         previousMouseAngle = currentMouseAngle;
+    }
+
+    private void MarkFirstInteraction()
+    {
+        if (hasInteractedOnce)
+        {
+            return;
+        }
+
+        hasInteractedOnce = true;
+        SetGuideVisible(false);
+    }
+
+    private void SetGuideVisible(bool visible)
+    {
+        if (guideRoot != null)
+        {
+            guideRoot.SetActive(visible);
+        }
+    }
+
+    private void UpdateGuideVisual()
+    {
+        if (guideRoot == null || hasInteractedOnce)
+        {
+            return;
+        }
+
+        Camera cam = targetCamera != null ? targetCamera : Camera.main;
+        if (cam == null)
+        {
+            return;
+        }
+
+        const float baseHeight = 0.12f;
+        const float forwardOffset = 0.02f;
+        const float floatAmplitude = 0.015f;
+        const float floatSpeed = 2f;
+
+        float floatOffset = Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
+
+        Vector3 basePosition =
+            transform.position +
+            Vector3.up * (baseHeight + floatOffset) +
+            transform.forward * forwardOffset;
+
+        guideRoot.transform.position = basePosition;
+
+        Vector3 toCamera = guideRoot.transform.position - cam.transform.position;
+        if (toCamera.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
+        guideRoot.transform.rotation = Quaternion.LookRotation(toCamera.normalized, Vector3.up);
     }
 
     private float GetMouseAngleAroundValve(Camera cam, Vector2 mouseScreenPosition)
@@ -626,6 +690,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         hasPreviousControllerPose = false;
 
         HideSkillCheckImmediate();
+        SetGuideVisible(false);
 
         if (stageFailPopupRoot != null)
         {
