@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 68618457f3f25fc4693e19fcfa7badd8
+timeCreated: 1455495838
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 59491
+  packageName: Untitled
+  packageVersion: 1.0
+  assetPath: Assets/Public Bathroom Assets/Scripts/objectInteraction.cs
+  uploadId: 118993

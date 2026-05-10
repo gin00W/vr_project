@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/Scenes/room04.unity
     guid: 761cc28f6c2b90047ad595b54de3ff24
   - enabled: 1
-    path: Assets/Scenes/room05.unity
+    path: Assets/Scenes/room04.unity
     guid: a600d45455c6f3b4791db983b37d7397
   - enabled: 1
     path: Assets/Scenes/room06.unity
