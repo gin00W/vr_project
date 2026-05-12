@@ -1,41 +1,44 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
-using System.Collections;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class ObsessiveElement : MonoBehaviour
 {
-    [Header("--- ���� ---")]
-    public string elementName = "�߶Ծ��� ����";
+    [Header("--- 설정 ---")]
+    public string elementName = "강박 요소";
 
-    [Header("--- ��¦�� ---")]
+    [Header("--- 반짝임 ---")]
     public float blinkSpeed = 3f;
     public Color normalColor = Color.white;
     public Color alertColor = new Color(1f, 0.3f, 0.3f);
 
     private Renderer rend;
     private Material mat;
-    private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable interactable;
+    private XRSimpleInteractable interactable;
     private bool isObsessing = false;
 
-    // URP / Built-in ����
-    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
-    private static readonly int ColorID = Shader.PropertyToID("_Color");
+    private static readonly int BaseColorID =
+        Shader.PropertyToID("_BaseColor");
+    private static readonly int ColorID =
+        Shader.PropertyToID("_Color");
 
     void Start()
     {
         rend = GetComponentInChildren<Renderer>();
-
         if (rend != null)
-            mat = rend.material; // �ν��Ͻ� ����
+            mat = rend.material;
 
         SetupInteractable();
     }
 
     void SetupInteractable()
     {
-        interactable = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+        interactable = GetComponent<XRSimpleInteractable>();
         if (interactable == null)
-            interactable = gameObject.AddComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
+            interactable =
+                gameObject.AddComponent<XRSimpleInteractable>();
 
         if (GetComponent<Collider>() == null)
             gameObject.AddComponent<BoxCollider>();
@@ -43,7 +46,6 @@ public class ObsessiveElement : MonoBehaviour
         interactable.selectEntered.AddListener(OnTouched);
     }
 
-    // MiniGameController���� ȣ��
     public void SetObsessing(bool active)
     {
         isObsessing = active;
@@ -59,7 +61,8 @@ public class ObsessiveElement : MonoBehaviour
     {
         while (isObsessing)
         {
-            float t = (Mathf.Sin(Time.time * blinkSpeed) + 1f) * 0.5f;
+            float t = (Mathf.Sin(Time.time * blinkSpeed)
+                + 1f) * 0.5f;
             ApplyColor(Color.Lerp(normalColor, alertColor, t));
             yield return null;
         }
@@ -77,11 +80,13 @@ public class ObsessiveElement : MonoBehaviour
 
     void OnTouched(SelectEnterEventArgs args)
     {
-        // ���� ��� ��ġ = ���� ī��Ʈ
+        // 터치 데이터 기록
+        DataCollector.Instance?.LogObsessionTouch();
+
         MeetingRoomManager.Instance?.AddResist();
 
-        // ��Ʈ�ѷ� ����
-        var baseInteractor = args.interactorObject as UnityEngine.XR.Interaction.Toolkit.Interactors.XRBaseInteractor;
+        var baseInteractor =
+            args.interactorObject as XRBaseInteractor;
         if (baseInteractor != null)
         {
             var controller = baseInteractor

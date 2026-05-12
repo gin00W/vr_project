@@ -6,7 +6,6 @@ public class MeetingRoomManager : MonoBehaviour
 {
     public static MeetingRoomManager Instance;
 
-    // 씬 이름 - 인스펙터에서 수정 가능하게
     [Header("--- 씬 이동 ---")]
     public string nextSceneName = "Bathroom";
 
@@ -21,7 +20,6 @@ public class MeetingRoomManager : MonoBehaviour
     [HideInInspector] public float clearTime = 0f;
     private float startTime;
 
-    // 게임 상태
     public enum State { Intro, Playing, Clear, Fail }
     [HideInInspector] public State currentState;
 
@@ -34,7 +32,6 @@ public class MeetingRoomManager : MonoBehaviour
     void Start()
     {
         startTime = Time.time;
-        // 2초 후 게임 시작 (씬 전환 후 적응 시간)
         Invoke(nameof(StartPlaying), 2f);
     }
 
@@ -42,10 +39,11 @@ public class MeetingRoomManager : MonoBehaviour
     {
         currentState = State.Playing;
         miniGame.StartMiniGame();
-        lightCtrl.SetObsessionMode(true);
+
+        // 불안 모드 조명
+        AtmosphereController.Instance?.SetAnxiousMode();
     }
 
-    // 미니게임 클리어 시 호출
     public void OnMiniGameClear()
     {
         if (currentState != State.Playing) return;
@@ -53,31 +51,43 @@ public class MeetingRoomManager : MonoBehaviour
         currentState = State.Clear;
         clearTime = Time.time - startTime;
 
-        lightCtrl.SetObsessionMode(false);
+        // 데이터 수집 종료
+        DataCollector.Instance?.EndSession(true);
+
+        // 편안 모드 조명
+        AtmosphereController.Instance?.SetCalmMode();
+
+        // 보상 시스템
+        if (DataCollector.Instance != null)
+            RewardSystem.Instance?.ShowReward(
+                DataCollector.Instance.session);
+
         door.Unlock();
         uiManager.ShowClearUI(resistCount, clearTime);
     }
 
-    // 미니게임 실패 시 호출
     public void OnMiniGameFail()
     {
         if (currentState != State.Playing) return;
 
         currentState = State.Fail;
-        uiManager.ShowFailUI();
 
-        // 3초 후 씬 리셋
+        // 데이터 수집 종료
+        DataCollector.Instance?.EndSession(false);
+
+        // 실패 조명
+        AtmosphereController.Instance?.SetFailMode();
+
+        uiManager.ShowFailUI();
         Invoke(nameof(ResetScene), 3f);
     }
 
-    // 강박 참기 카운트
     public void AddResist()
     {
         resistCount++;
         uiManager.ShowToast($"참았어요! 💪 ({resistCount}회)");
     }
 
-    // 다음 씬으로 이동 (Door에서 호출)
     public void GoNextScene()
     {
         StartCoroutine(LoadNextScene());
@@ -91,6 +101,7 @@ public class MeetingRoomManager : MonoBehaviour
 
     void ResetScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().buildIndex);
     }
 }

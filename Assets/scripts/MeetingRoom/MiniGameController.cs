@@ -21,49 +21,58 @@ public class MiniGameController : MonoBehaviour
     private float remainTime;
     private bool isPlaying = false;
 
+    // 반응속도 측정용
+    private float lastAnswerTime;
+
     public void StartMiniGame()
     {
         currentIndex = 0;
         remainTime = timeLimit;
         isPlaying = true;
+        lastAnswerTime = Time.time;
 
         foreach (var e in obsessiveElements)
             e.SetObsessing(true);
 
-        uiManager.UpdateSequenceDisplay(sequence, currentIndex);
+        uiManager.UpdateSequenceDisplay(
+            sequence, currentIndex);
         uiManager.SetupWordButtons(sequence, this);
 
         StartCoroutine(TimerLoop());
     }
 
-    // 버튼 눌렸을 때 (UIManager에서 호출)
     public void OnWordSelected(string word)
     {
         if (!isPlaying) return;
 
         if (word == sequence[currentIndex])
         {
-            // 정답
+            // 정답 - 반응속도 기록
+            DataCollector.Instance?.LogWordSelected(true);
+
             currentIndex++;
             uiManager.ShowToast("✓ 정답!");
 
             if (currentIndex >= sequence.Count)
             {
-                // 클리어!
                 isPlaying = false;
                 StopAllCoroutines();
                 StopAllObsessions();
-                MeetingRoomManager.Instance?.OnMiniGameClear();
+                MeetingRoomManager.Instance?
+                    .OnMiniGameClear();
             }
             else
             {
-                uiManager.UpdateSequenceDisplay(sequence, currentIndex);
+                uiManager.UpdateSequenceDisplay(
+                    sequence, currentIndex);
                 uiManager.SetupWordButtons(sequence, this);
             }
         }
         else
         {
-            // 오답 - 시간 패널티
+            // 오답 기록
+            DataCollector.Instance?.LogWordSelected(false);
+
             remainTime -= 8f;
             uiManager.ShowToast("❌ 틀렸어요! -8초");
             StartCoroutine(CameraShake());
@@ -104,7 +113,8 @@ public class MiniGameController : MonoBehaviour
         while (elapsed < 0.3f)
         {
             elapsed += Time.deltaTime;
-            cam.localPosition = origin + Random.insideUnitSphere * 0.015f;
+            cam.localPosition = origin +
+                Random.insideUnitSphere * 0.015f;
             yield return null;
         }
 
