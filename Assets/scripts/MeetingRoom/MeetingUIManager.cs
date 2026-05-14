@@ -15,11 +15,32 @@ public class MeetingUIManager : MonoBehaviour
     [Header("--- 버튼 (5개 미리 배치) ---")]
     public Button[] wordButtons;
 
+    void Start()
+    {
+        // 시작할 때 전부 숨기기
+        if (toastText != null)
+            toastText.gameObject.SetActive(false);
+
+        if (resultText != null)
+            resultText.gameObject.SetActive(false);
+
+        // 버튼 전부 숨기기
+        foreach (var btn in wordButtons)
+        {
+            if (btn != null)
+                btn.gameObject.SetActive(false);
+        }
+    }
+
     // 시퀀스 표시 업데이트
     public void UpdateSequenceDisplay(List<string> words, int currentIdx)
     {
-        string display = "";
+        if (sequenceText == null) return;
 
+        // 시퀀스 텍스트 처음 표시할 때 활성화
+        sequenceText.gameObject.SetActive(true);
+
+        string display = "";
         for (int i = 0; i < words.Count; i++)
         {
             if (i < currentIdx)
@@ -39,8 +60,7 @@ public class MeetingUIManager : MonoBehaviour
             }
         }
 
-        if (sequenceText != null)
-            sequenceText.text = display;
+        sequenceText.text = display;
     }
 
     // 버튼 셔플 세팅
@@ -56,12 +76,15 @@ public class MeetingUIManager : MonoBehaviour
 
         for (int i = 0; i < wordButtons.Length; i++)
         {
+            if (wordButtons[i] == null) continue;
+
             if (i < shuffled.Count)
             {
                 wordButtons[i].gameObject.SetActive(true);
 
                 // 텍스트 세팅
-                var tmp = wordButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+                var tmp = wordButtons[i]
+                    .GetComponentInChildren<TextMeshProUGUI>();
                 if (tmp != null) tmp.text = shuffled[i];
 
                 // 클릭 이벤트
@@ -135,6 +158,13 @@ public class MeetingUIManager : MonoBehaviour
     {
         if (resultText == null) return;
 
+        // 버튼 숨기기
+        foreach (var btn in wordButtons)
+        {
+            if (btn != null)
+                btn.gameObject.SetActive(false);
+        }
+
         resultText.gameObject.SetActive(true);
         resultText.text =
             "<color=#4CAF50><b>✓ 미션 완료!</b></color>\n\n" +
@@ -147,6 +177,13 @@ public class MeetingUIManager : MonoBehaviour
     public void ShowFailUI()
     {
         if (resultText == null) return;
+
+        // 버튼 숨기기
+        foreach (var btn in wordButtons)
+        {
+            if (btn != null)
+                btn.gameObject.SetActive(false);
+        }
 
         resultText.gameObject.SetActive(true);
         resultText.text =
