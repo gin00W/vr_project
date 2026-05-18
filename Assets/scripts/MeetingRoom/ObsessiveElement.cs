@@ -19,10 +19,8 @@ public class ObsessiveElement : MonoBehaviour
     private XRSimpleInteractable interactable;
     private bool isObsessing = false;
 
-    private static readonly int BaseColorID =
-        Shader.PropertyToID("_BaseColor");
-    private static readonly int ColorID =
-        Shader.PropertyToID("_Color");
+    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+    private static readonly int ColorID = Shader.PropertyToID("_Color");
 
     void Start()
     {
@@ -31,14 +29,16 @@ public class ObsessiveElement : MonoBehaviour
             mat = rend.material;
 
         SetupInteractable();
+
+        // 시작 시 깜빡임
+        SetObsessing(true);
     }
 
     void SetupInteractable()
     {
         interactable = GetComponent<XRSimpleInteractable>();
         if (interactable == null)
-            interactable =
-                gameObject.AddComponent<XRSimpleInteractable>();
+            interactable = gameObject.AddComponent<XRSimpleInteractable>();
 
         if (GetComponent<Collider>() == null)
             gameObject.AddComponent<BoxCollider>();
@@ -61,8 +61,7 @@ public class ObsessiveElement : MonoBehaviour
     {
         while (isObsessing)
         {
-            float t = (Mathf.Sin(Time.time * blinkSpeed)
-                + 1f) * 0.5f;
+            float t = (Mathf.Sin(Time.time * blinkSpeed) + 1f) * 0.5f;
             ApplyColor(Color.Lerp(normalColor, alertColor, t));
             yield return null;
         }
@@ -78,15 +77,13 @@ public class ObsessiveElement : MonoBehaviour
             mat.SetColor(ColorID, color);
     }
 
+    // VR 컨트롤러로 잡았을 때 (강박 행동 = 참기)
     void OnTouched(SelectEnterEventArgs args)
     {
-        // 터치 데이터 기록
         DataCollector.Instance?.LogObsessionTouch();
-
         MeetingRoomManager.Instance?.AddResist();
 
-        var baseInteractor =
-            args.interactorObject as XRBaseInteractor;
+        var baseInteractor = args.interactorObject as XRBaseInteractor;
         if (baseInteractor != null)
         {
             var controller = baseInteractor
