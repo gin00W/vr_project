@@ -778,8 +778,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB2E4\uC74C\uC73C\uB85C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4e086c94ddc416543a52c00063841121, type: 2}
+  m_sharedMaterial: {fileID: -6567897050002199982, guid: 4e086c94ddc416543a52c00063841121, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -972,8 +972,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC2DC\uC791\uD558\uAE30"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4e086c94ddc416543a52c00063841121, type: 2}
+  m_sharedMaterial: {fileID: -6567897050002199982, guid: 4e086c94ddc416543a52c00063841121, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2110,8 +2110,8 @@ MonoBehaviour:
   m_text: "\uC815\uB9AC\uC5D0\uB294 \uC815\uB2F5\uC774 \uC5C6\uB2F5\uB2C8\uB2E4.
     \n\uC637\uB4E4\uC744 \uB2E4\uC2DC \uBC30\uCE58\uD574\uBCF4\uC138\uC694!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4e086c94ddc416543a52c00063841121, type: 2}
+  m_sharedMaterial: {fileID: -6567897050002199982, guid: 4e086c94ddc416543a52c00063841121, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2135,8 +2135,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.5
-  m_fontSizeBase: 0.5
+  m_fontSize: 0.4
+  m_fontSizeBase: 0.4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3269,8 +3269,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC774\uAC83\uB3C4 \uB098\uB984 \uAE54\uB054\uD558\uB124\uC694!"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4e086c94ddc416543a52c00063841121, type: 2}
+  m_sharedMaterial: {fileID: -6567897050002199982, guid: 4e086c94ddc416543a52c00063841121, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
