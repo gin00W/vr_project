@@ -8,22 +8,22 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/start scene.unity
     guid: 8ac22c113129fcc4485065f6145619cf
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/room01.unity
     guid: 29abea6573bae384791f6cf5c6511589
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/room02.unity
     guid: 448c6ea2edba17d42a1c53777eff06af
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/room03.unity
     guid: 02d07cee6a18d7349863cde7f591ef77
   - enabled: 1
     path: Assets/Scenes/room04.unity
     guid: f86c317f1446b43ffacbb90838b1b665
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/room04.unity
     guid: f86c317f1446b43ffacbb90838b1b665
   - enabled: 0
@@ -35,7 +35,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/room08.unity
     guid: c20b74ad653cfb242ad17566d2ee984b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/EndingScene.unity
     guid: 4c0658074c4ed49a39a1d06aa8e71d05
   m_configObjects:

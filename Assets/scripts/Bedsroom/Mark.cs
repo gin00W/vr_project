@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Mark : MonoBehaviour
 {
@@ -12,22 +12,18 @@ public class Mark : MonoBehaviour
 
     [Header("Start Screen UI")]
     public GameObject introPanelRoot;
-    public TextMeshProUGUI introText;
-
-    [TextArea(2, 5)]
-    public string startMessage = "옷을 다시 배치해 각 층의 조건을 완성하세요.";
 
     [Header("Clear Screen UI")]
     public GameObject clearPanelRoot;
-    public TextMeshProUGUI clearText;
 
-    [TextArea(2, 5)]
-    public string clearMessage = "잘했어요! 옷장의 조건을 모두 완성했습니다.";
+    [Header("Ending Scene")]
+    public string endingSceneName = "Ending sence";
 
     [Header("Optional - Disable clothes before start")]
     public UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable[] clothInteractables;
 
     private bool hasStarted = false;
+    private bool hasCleared = false;
 
     private void Start()
     {
@@ -35,7 +31,6 @@ public class Mark : MonoBehaviour
         HideIntroPanel();
         HideClearPanel();
         SetClothesInteractable(false);
-        ApplyMessage();
     }
 
     private void OnEnable()
@@ -52,15 +47,6 @@ public class Mark : MonoBehaviour
         {
             stageManager.OnStageCleared -= ShowClearPanel;
         }
-    }
-
-    private void ApplyMessage()
-    {
-        if (introText != null)
-            introText.text = startMessage;
-
-        if (clearText != null)
-            clearText.text = clearMessage;
     }
 
     public void ShowExclamation()
@@ -80,7 +66,6 @@ public class Mark : MonoBehaviour
         if (hasStarted)
             return;
 
-        ApplyMessage();
         HideExclamation();
 
         if (introPanelRoot != null)
@@ -118,7 +103,10 @@ public class Mark : MonoBehaviour
 
     public void ShowClearPanel()
     {
-        ApplyMessage();
+        if (hasCleared)
+            return;
+
+        hasCleared = true;
 
         if (clearPanelRoot != null)
             clearPanelRoot.SetActive(true);
@@ -132,8 +120,13 @@ public class Mark : MonoBehaviour
 
     public void OnNextButtonClicked()
     {
-        HideClearPanel();
-        Debug.Log("다음으로 버튼이 눌렸습니다. 다음 스테이지 이동 기능은 아직 미구현 상태입니다.");
+        if (string.IsNullOrEmpty(endingSceneName))
+        {
+            Debug.LogWarning("endingSceneName이 비어 있습니다.");
+            return;
+        }
+
+        SceneManager.LoadScene(endingSceneName);
     }
 
     private void SetClothesInteractable(bool value)
