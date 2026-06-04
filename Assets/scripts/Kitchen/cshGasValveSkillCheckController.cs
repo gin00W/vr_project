@@ -22,12 +22,12 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     [Header("Valve")]
     [SerializeField] private Transform valveTarget;
     [SerializeField] private Vector3 localRotationAxis = Vector3.forward;
-    [SerializeField] private float successRotateLeftDegrees = 10f;
+    [SerializeField] private float successRotateLeftDegrees = 25f;
     [SerializeField] private float minValveAngleDegrees = 0f;
     [SerializeField] private float failValveAngleDegrees = 90f;
 
     [Header("VR Rotation")]
-    [SerializeField] private float vrRotationScale = 1f;
+    [SerializeField] private float vrRotationScale = 3f;
     [SerializeField] private bool invertVrClockwise = true;
     [SerializeField] private float vrRotationDeadZoneDegrees = 0.1f;
     [SerializeField] private bool allowVrRotateWithoutActionIfUnassigned = true;
@@ -94,9 +94,8 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     private bool isVrSelected;
     private IXRSelectInteractor activeSelectInteractor;
     private Transform activeInteractorTransform;
-    private Vector3 previousControllerUp;
-    private Vector3 previousControllerForward;
-    private bool hasPreviousControllerPose;
+    private Vector3 previousVrProjectedDirection;
+    private bool hasPreviousVrProjectedDirection;
 
     private bool isMouseDraggingObject;
     private float previousMouseAngle;
@@ -243,7 +242,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         activeSelectInteractor = args.interactorObject;
         activeInteractorTransform = ResolveInteractorTransform(args.interactorObject);
         isVrSelected = activeInteractorTransform != null;
-        hasPreviousControllerPose = false;
+        hasPreviousVrProjectedDirection = false;
     }
 
     private void OnSelectExited(SelectExitEventArgs args)
@@ -251,7 +250,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         isVrSelected = false;
         activeSelectInteractor = null;
         activeInteractorTransform = null;
-        hasPreviousControllerPose = false;
+        hasPreviousVrProjectedDirection = false;
     }
 
     private Transform ResolveInteractorTransform(IXRSelectInteractor interactorObject)
@@ -293,7 +292,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
 
         if (isFading || !isVrSelected)
         {
-            hasPreviousControllerPose = false;
+            hasPreviousVrProjectedDirection = false;
             return;
         }
 
@@ -302,57 +301,53 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
             activeInteractorTransform = ResolveInteractorTransform(activeSelectInteractor);
             if (activeInteractorTransform == null)
             {
-                hasPreviousControllerPose = false;
+                hasPreviousVrProjectedDirection = false;
                 return;
             }
         }
 
         if (!IsVrRotateModifierHeld())
         {
-            hasPreviousControllerPose = false;
+            hasPreviousVrProjectedDirection = false;
             return;
         }
 
-        Vector3 currentUp = activeInteractorTransform.up;
-        Vector3 currentForward = activeInteractorTransform.forward;
+        Vector3 axisWorld = valveTarget != null
+            ? valveTarget.TransformDirection(localRotationAxis.normalized)
+            : transform.TransformDirection(localRotationAxis.normalized);
 
-        if (!hasPreviousControllerPose)
+        Vector3 pivotWorld = valveTarget != null ? valveTarget.position : transform.position;
+        Vector3 controllerOffset = activeInteractorTransform.position - pivotWorld;
+        Vector3 projectedDirection = Vector3.ProjectOnPlane(controllerOffset, axisWorld);
+
+        if (projectedDirection.sqrMagnitude <= 0.0001f)
         {
-            previousControllerUp = currentUp;
-            previousControllerForward = currentForward;
-            hasPreviousControllerPose = true;
+            hasPreviousVrProjectedDirection = false;
             return;
         }
 
-        Vector3 rollAxis = currentForward.sqrMagnitude > 0.0001f
-            ? currentForward.normalized
-            : previousControllerForward.normalized;
+        projectedDirection.Normalize();
 
-        Vector3 previousUpOnPlane = Vector3.ProjectOnPlane(previousControllerUp, rollAxis).normalized;
-        Vector3 currentUpOnPlane = Vector3.ProjectOnPlane(currentUp, rollAxis).normalized;
-
-        if (previousUpOnPlane.sqrMagnitude <= 0.0001f || currentUpOnPlane.sqrMagnitude <= 0.0001f)
+        if (!hasPreviousVrProjectedDirection)
         {
-            previousControllerUp = currentUp;
-            previousControllerForward = currentForward;
+            previousVrProjectedDirection = projectedDirection;
+            hasPreviousVrProjectedDirection = true;
             return;
         }
 
-        float signedRollDelta = Vector3.SignedAngle(previousUpOnPlane, currentUpOnPlane, rollAxis);
-        float clockwiseDelta = invertVrClockwise ? -signedRollDelta : signedRollDelta;
+        float signedOrbitDelta = Vector3.SignedAngle(previousVrProjectedDirection, projectedDirection, axisWorld);
+        float clockwiseDelta = invertVrClockwise ? -signedOrbitDelta : signedOrbitDelta;
 
         if (Mathf.Abs(clockwiseDelta) < vrRotationDeadZoneDegrees)
         {
-            previousControllerUp = currentUp;
-            previousControllerForward = currentForward;
+            previousVrProjectedDirection = projectedDirection;
             return;
         }
 
         float appliedDelta = clockwiseDelta * vrRotationScale;
         RotateValveBy(appliedDelta);
 
-        previousControllerUp = currentUp;
-        previousControllerForward = currentForward;
+        previousVrProjectedDirection = projectedDirection;
     }
 
     private bool IsVrRotateModifierHeld()
@@ -583,7 +578,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
 
         isMouseDraggingObject = false;
         hasPreviousMouseAngle = false;
-        hasPreviousControllerPose = false;
+        hasPreviousVrProjectedDirection = false;
 
         if (skillCheckRoot != null)
         {
@@ -772,7 +767,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         activeInteractorTransform = null;
         isMouseDraggingObject = false;
         hasPreviousMouseAngle = false;
-        hasPreviousControllerPose = false;
+        hasPreviousVrProjectedDirection = false;
 
         HideSkillCheckImmediate();
         SetGuideVisible(false);
