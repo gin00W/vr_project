@@ -10451,7 +10451,7 @@ MonoBehaviour:
   startTimeSeconds: 70
   timeOutPopup: {fileID: 7595186867022230819}
   nextStageButton: {fileID: 7069646481201839714}
-  nextStageSceneName: room04
+  nextStageSceneName: room02
 --- !u!222 &6972055166842496976
 CanvasRenderer:
   m_ObjectHideFlags: 0

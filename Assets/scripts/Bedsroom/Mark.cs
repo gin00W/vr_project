@@ -16,8 +16,8 @@ public class Mark : MonoBehaviour
     [Header("Clear Screen UI")]
     public GameObject clearPanelRoot;
 
-    [Header("Ending Scene")]
-    public string endingSceneName = "Ending sence";
+    [Header("Next Scene")]
+    public string nextSceneName = "room03";
 
     [Header("Optional - Disable clothes before start")]
     public UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable[] clothInteractables;
@@ -120,13 +120,13 @@ public class Mark : MonoBehaviour
 
     public void OnNextButtonClicked()
     {
-        if (string.IsNullOrEmpty(endingSceneName))
+        if (string.IsNullOrEmpty(nextSceneName))
         {
-            Debug.LogWarning("endingSceneName이 비어 있습니다.");
+            Debug.LogWarning("nextSceneName이 비어 있습니다.");
             return;
         }
 
-        SceneManager.LoadScene(endingSceneName);
+        SceneManager.LoadScene(nextSceneName);
     }
 
     private void SetClothesInteractable(bool value)

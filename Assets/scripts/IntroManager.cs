@@ -31,6 +31,6 @@ public class IntroManager : MonoBehaviour
 
     public void OnStartGameButtonClick()
     {
-        SceneManager.LoadScene("room01");
+        SceneManager.LoadScene("room04");
     }
 }
