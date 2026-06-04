@@ -2130,10 +2130,8 @@ MonoBehaviour:
   successRotateLeftDegrees: 25
   minValveAngleDegrees: 0
   failValveAngleDegrees: 90
-  vrRotationScale: 15
+  vrRotationScale: 1
   invertVrClockwise: 1
-  vrRotationDeadZoneDegrees: 0.1
-  allowVrRotateWithoutActionIfUnassigned: 1
   mouseRotationScale: 0.1
   invertMouseClockwise: 0
   guideRoot: {fileID: 653018562}

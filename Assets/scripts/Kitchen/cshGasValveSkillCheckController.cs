@@ -1,9 +1,12 @@
+// Assets/scripts/Interaction/cshGasValveSkillCheckController.cs
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(XRSimpleInteractable))]
@@ -26,9 +29,11 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     [Header("VR Rotation")]
     [SerializeField] private float vrRotationScale = 1f;
     [SerializeField] private bool invertVrClockwise = true;
+    [SerializeField] private float vrRotationDeadZoneDegrees = 0.1f;
+    [SerializeField] private bool allowVrRotateWithoutActionIfUnassigned = true;
 
     [Header("Mouse Rotation")]
-    [SerializeField] private float mouseRotationScale = 1f;
+    [SerializeField] private float mouseRotationScale = 0.1f;
     [SerializeField] private bool invertMouseClockwise = false;
 
     [Header("Guide Image")]
@@ -87,6 +92,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     private bool hasInteractedOnce;
 
     private bool isVrSelected;
+    private IXRSelectInteractor activeSelectInteractor;
     private Transform activeInteractorTransform;
     private Vector3 previousControllerUp;
     private Vector3 previousControllerForward;
@@ -102,6 +108,8 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
     private float targetBlueZoneAngle;
     private float redMoveTimer;
     private float fadeTimer;
+
+    private bool hasLoggedMissingVrAction;
 
     private float ArcMin => Mathf.Min(arcStartAngle, arcEndAngle);
     private float ArcMax => Mathf.Max(arcStartAngle, arcEndAngle);
@@ -232,28 +240,50 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
 
         MarkFirstInteraction();
 
-        isVrSelected = true;
-        activeInteractorTransform = args.interactorObject?.transform;
+        activeSelectInteractor = args.interactorObject;
+        activeInteractorTransform = ResolveInteractorTransform(args.interactorObject);
+        isVrSelected = activeInteractorTransform != null;
         hasPreviousControllerPose = false;
     }
 
     private void OnSelectExited(SelectExitEventArgs args)
     {
         isVrSelected = false;
+        activeSelectInteractor = null;
         activeInteractorTransform = null;
         hasPreviousControllerPose = false;
     }
 
-    private void HandleVrInput()
+    private Transform ResolveInteractorTransform(IXRSelectInteractor interactorObject)
     {
-        if (vrRotateHoldAction.action == null)
+        if (interactorObject == null)
         {
-            return;
+            return null;
         }
 
+        if (interactorObject is XRBaseInteractor xrBaseInteractor)
+        {
+            if (xrBaseInteractor.attachTransform != null)
+            {
+                return xrBaseInteractor.attachTransform;
+            }
+
+            return xrBaseInteractor.transform;
+        }
+
+        if (interactorObject is Component component)
+        {
+            return component.transform;
+        }
+
+        return null;
+    }
+
+    private void HandleVrInput()
+    {
         if (isSkillCheckActive)
         {
-            if (vrRotateHoldAction.action.WasPressedThisFrame())
+            if (IsVrRotateModifierPressedThisFrame())
             {
                 ResolveSkillCheck();
             }
@@ -261,13 +291,23 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
             return;
         }
 
-        if (isFading || !isVrSelected || activeInteractorTransform == null)
+        if (isFading || !isVrSelected)
         {
             hasPreviousControllerPose = false;
             return;
         }
 
-        if (!vrRotateHoldAction.action.IsPressed())
+        if (activeInteractorTransform == null)
+        {
+            activeInteractorTransform = ResolveInteractorTransform(activeSelectInteractor);
+            if (activeInteractorTransform == null)
+            {
+                hasPreviousControllerPose = false;
+                return;
+            }
+        }
+
+        if (!IsVrRotateModifierHeld())
         {
             hasPreviousControllerPose = false;
             return;
@@ -284,17 +324,62 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
             return;
         }
 
-        float signedRollDelta = Vector3.SignedAngle(previousControllerUp, currentUp, currentForward);
-        float clockwiseDelta = invertVrClockwise ? -signedRollDelta : signedRollDelta;
-        float appliedDelta = clockwiseDelta * vrRotationScale;
+        Vector3 rollAxis = currentForward.sqrMagnitude > 0.0001f
+            ? currentForward.normalized
+            : previousControllerForward.normalized;
 
-        if (Mathf.Abs(appliedDelta) > 0f)
+        Vector3 previousUpOnPlane = Vector3.ProjectOnPlane(previousControllerUp, rollAxis).normalized;
+        Vector3 currentUpOnPlane = Vector3.ProjectOnPlane(currentUp, rollAxis).normalized;
+
+        if (previousUpOnPlane.sqrMagnitude <= 0.0001f || currentUpOnPlane.sqrMagnitude <= 0.0001f)
         {
-            RotateValveBy(appliedDelta);
+            previousControllerUp = currentUp;
+            previousControllerForward = currentForward;
+            return;
         }
+
+        float signedRollDelta = Vector3.SignedAngle(previousUpOnPlane, currentUpOnPlane, rollAxis);
+        float clockwiseDelta = invertVrClockwise ? -signedRollDelta : signedRollDelta;
+
+        if (Mathf.Abs(clockwiseDelta) < vrRotationDeadZoneDegrees)
+        {
+            previousControllerUp = currentUp;
+            previousControllerForward = currentForward;
+            return;
+        }
+
+        float appliedDelta = clockwiseDelta * vrRotationScale;
+        RotateValveBy(appliedDelta);
 
         previousControllerUp = currentUp;
         previousControllerForward = currentForward;
+    }
+
+    private bool IsVrRotateModifierHeld()
+    {
+        if (vrRotateHoldAction.action == null)
+        {
+            if (!hasLoggedMissingVrAction && !allowVrRotateWithoutActionIfUnassigned)
+            {
+                Debug.LogWarning("Vr Rotate Hold Action is not assigned.");
+                hasLoggedMissingVrAction = true;
+            }
+
+            return allowVrRotateWithoutActionIfUnassigned;
+        }
+
+        hasLoggedMissingVrAction = false;
+        return vrRotateHoldAction.action.IsPressed();
+    }
+
+    private bool IsVrRotateModifierPressedThisFrame()
+    {
+        if (vrRotateHoldAction.action == null)
+        {
+            return allowVrRotateWithoutActionIfUnassigned;
+        }
+
+        return vrRotateHoldAction.action.WasPressedThisFrame();
     }
 
     private void HandleMouseTestInput()
@@ -342,7 +427,6 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
                 if (clickedThisObject)
                 {
                     MarkFirstInteraction();
-
                     isMouseDraggingObject = true;
                     previousMouseAngle = GetMouseAngleAroundValve(cam, mouse.position.ReadValue());
                     hasPreviousMouseAngle = true;
@@ -684,6 +768,7 @@ public sealed class GasValveSkillCheckController : MonoBehaviour
         isSkillCheckActive = false;
         isFading = false;
         isVrSelected = false;
+        activeSelectInteractor = null;
         activeInteractorTransform = null;
         isMouseDraggingObject = false;
         hasPreviousMouseAngle = false;
